@@ -13,13 +13,13 @@ class MyAccountManager(BaseUserManager):
             raise ValueError('User must have an username')
 
         user = self.model(
-            email = self.normalize_email(email),          #normalize_email if the email is in capital letter
+            email = self.normalize_email(email),
             username = username,
             first_name = first_name,
             last_name = last_name,
         )
 
-        user.set_password(password)                       #For setting the password
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -66,24 +66,24 @@ class Account(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def has_perm(self, perm, obj=None):                  #For giving the permission to make changes 
+    def has_perm(self, perm, obj=None):
         return self.is_admin
 
     def has_module_perms(self, add_label):
         return True
 
 
-# class UserProfile(models.Model):
-#     user = models.OneToOneField(Account, on_delete=models.CASCADE)
-#     address_line_1 = models.CharField(blank=True, max_length=100)
-#     address_line_2 = models.CharField(blank=True, max_length=100)
-#     profile_picture = models.ImageField(blank=True, upload_to='userprofile')
-#     city = models.CharField(blank=True, max_length=20)
-#     state = models.CharField(blank=True, max_length=20)
-#     country = models.CharField(blank=True, max_length=20)
-#
-#     def __str__(self):
-#         return self.user.first_name
-#
-#     def full_address(self):
-#         return f'{self.address_line_1} {self.address_line_2}'
+class UserProfile(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    address_line_1 = models.CharField(blank=True, max_length=100)
+    address_line_2 = models.CharField(blank=True, max_length=100)
+    profile_picture = models.ImageField(blank=True, upload_to='userprofile')
+    city = models.CharField(blank=True, max_length=20)
+    state = models.CharField(blank=True, max_length=20)
+    country = models.CharField(blank=True, max_length=20)
+
+    def __str__(self):
+        return self.user.first_name
+
+    def full_address(self):
+        return f'{self.address_line_1} {self.address_line_2}'
